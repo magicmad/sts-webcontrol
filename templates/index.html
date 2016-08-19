@@ -1,0 +1,58 @@
+<!DOCTYPE html> <html lang="en">
+  <head>
+    <title>STS ROBOT CONTROL</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/static/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/static/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script type="text/javascript" src="/static/jsmpg.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/sts.js"></script>
+    <style type="text/css">
+	body {
+		width: 100%;
+		height: 100%;
+		margin: 0px;
+		padding: 0px;
+		overflow:hidden;
+	}
+	
+	#videoCanvas {
+		margin: 0px;
+		padding: 0px;
+	}
+    </style>
+  </head>
+  <body onload="startVideo();">
+    <canvas id="videoCanvas">
+      <p>
+	Please use a browser that supports the Canvas Element, like
+	<a href="http://www.google.com/chrome">Chrome</a>,
+	<a href="http://www.mozilla.com/firefox/">Firefox</a>,
+	<a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+      </p>
+    </canvas>
+    <div><img src="/static/stop.png" id="stop" onclick="stopMotors();" style="position:absolute; left:10px; bottom:10px;"></div>
+    <div><img src="/static/circle2.png" id="joy" onclick="driveMotors();" style="position:absolute; right:10px; bottom:10px; border:1px solid black;"></div>
+	<div style="position:absolute; right:10px; top:10px;">
+		X<input type="text" name="ix" id="ix"> - Y<input type="text" name="iy" id="iy">
+		<br>
+		Y1<input type="text" name="iy1"> - Y2<input type="text" name="iy2">
+		<br>
+		result: <input type="text" name="result" id="result">
+	</div>
+  </body>
+</html>
