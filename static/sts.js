@@ -21,17 +21,17 @@ window.addEventListener('resize', resizeCanvas);
 // retrieve mouse x-y pos
 function getMouseXY(e) 
 {
-  if (IE) { // grab the x-y pos.s if browser is IE
-    tempX = event.clientX + document.body.scrollLeft
-    tempY = event.clientY + document.body.scrollTop
-  } else {  // grab the x-y pos.s if browser is NS
-    tempX = e.pageX
-    tempY = e.pageY
-  }  
-  // catch possible negative values in NS4
-  if (tempX < 0){tempX = 0}
-  if (tempY < 0){tempY = 0}  
-  return true
+	if (IE) { // grab the x-y pos.s if browser is IE
+		tempX = event.clientX + document.body.scrollLeft
+		tempY = event.clientY + document.body.scrollTop
+	} else {  // grab the x-y pos.s if browser is NS
+		tempX = e.pageX
+		tempY = e.pageY
+	}
+	// catch possible negative values in NS4
+	if (tempX < 0){tempX = 0}
+	if (tempY < 0){tempY = 0}  
+	return true
 }
 
 // get values from joy image click
@@ -74,13 +74,11 @@ function driveMotors()
   x = joyValues[0];
   y = joyValues[1];
   
-  $("#ix").text(x);
-  $("#iy").text(y);
  
   // center click - stop
   if(x > -20 && x < 20 && y > -20 && y < 20)
   {
-    x = 0;
+	x = 0;
 	y = 0; 
   }
   
@@ -93,7 +91,7 @@ function driveMotors()
   }
   else
   {  
-	// motors 1 and 2 speed
+    // motors 1 and 2 speed
     y1 = y;
     y2 = y;
   
@@ -114,9 +112,6 @@ function driveMotors()
       y1 = y1 * factor;
   }
 
-  document.getElementById('result').text = y1 + " - " + y2;
-  //  return false;
-
   // convert to integers
   y1 = parseInt(y1, 10);
   y2 = parseInt(y2, 10);
@@ -134,13 +129,14 @@ function driveMotors()
 
 function stopMotors()
 {
-  $.getJSON('/drive', {
-    m1: 0,
-    m2: 0
-  }, function(data) {
-    $("#result").text(data.m1 + " - " + data.m2);
-  });
+	$.getJSON('/drive', {
+		m1: 0,
+		m2: 0
+	}, function(data) {
+		$("#result").text(data.m1 + " - " + data.m2);
+	});
 }
+
 
 
 function resizeCanvas()
@@ -159,10 +155,10 @@ function startVideo()
 	var ctx = canvas.getContext('2d');
 	ctx.fillStyle = '#444';
 	ctx.fillText('Loading...', canvas.width/2-30, canvas.height/3);
-	
+
 	// Setup the WebSocket connection and start the player
 	var client = new WebSocket('ws://10.1.1.99:8084/');
 	var player = new jsmpeg(client, {canvas:canvas});
-	
+
 	resizeCanvas();
 }
