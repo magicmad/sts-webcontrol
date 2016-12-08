@@ -1,5 +1,6 @@
 # sts-webcontrol
-Control your Raspberry Pi STS robot over a webinterface with streaming video
+Control your Raspberry Pi STS robot over a webinterface with streaming video.
+Also supports using a pan/tilt camera mount.
 
 <img src="https://i.imgur.com/orYRV0zl.jpg">
 
@@ -8,6 +9,6 @@ Control your Raspberry Pi STS robot over a webinterface with streaming video
 Install notes:
 - first you need to install https://github.com/waveform80/pistreaming for the streaming video
 - then run <i>"git clone https://github.com/magicmad/sts-webcontrol.git"</i> to download this repository
-- change to the new folder with <i>"cd sts-webcontrol"</i> and start the app by running <i>"sudo python app.py"</i>
+- change to the new folder with <i>"cd sts-webcontrol"</i> and start the app by running <i>"sudo python sts-webcontrol.py"</i>
 
 More info on the STS-Pi: https://shop.pimoroni.com/products/sts-pi
