@@ -47,6 +47,8 @@
     </canvas>
     <div><img src="/static/stop.png" id="stop" onclick="stopMotors();" style="position:absolute; left:10px; bottom:10px;"></div>
     <div><img src="/static/circle2.png" id="joy" onclick="driveMotors();" style="position:absolute; right:10px; bottom:10px; border:1px solid black;"></div>
+	<div><img src="/static/black.gif" id="servo0" onclick="servo(0);" style="width:100px; height:20px; position:absolute; left:10px; top:200px; background:#000;"></div>
+	<div><img src="/static/black.gif" id="servo1" onclick="servo(1);" style="width:20px; height:100px; position:absolute; left:40px; top:40px; background:#000;"></div>
 <!--
 	<div style="position:absolute; right:10px; top:10px;">
 		X<input type="text" name="ix" id="ix"> - Y<input type="text" name="iy" id="iy">
@@ -54,6 +56,9 @@
 		Y1<input type="text" name="iy1"> - Y2<input type="text" name="iy2">
 		<br>
 		result: <input type="text" name="result" id="result">
+	</div>
+	<div style="position:absolute; right:10px; top:10px;">
+	Servo: <input type="text" name="servo1" id="servo1"> <input type="submit" onclick="servo1();">
 	</div>
 -->
   </body>

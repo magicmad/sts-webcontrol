@@ -1,6 +1,6 @@
 // GLobal variables to hold mouse x-y pos.s
-var tempX = 0
-var tempY = 0
+var mouseX = 0
+var mouseY = 0
 
 
 // Detect if the browser is IE or not.
@@ -22,111 +22,108 @@ window.addEventListener('resize', resizeCanvas);
 function getMouseXY(e) 
 {
 	if (IE) { // grab the x-y pos.s if browser is IE
-		tempX = event.clientX + document.body.scrollLeft
-		tempY = event.clientY + document.body.scrollTop
+		mouseX = event.clientX + document.body.scrollLeft
+		mouseY = event.clientY + document.body.scrollTop
 	} else {  // grab the x-y pos.s if browser is NS
-		tempX = e.pageX
-		tempY = e.pageY
+		mouseX = e.pageX
+		mouseY = e.pageY
 	}
 	// catch possible negative values in NS4
-	if (tempX < 0){tempX = 0}
-	if (tempY < 0){tempY = 0}  
+	if (mouseX < 0){mouseX = 0}
+	if (mouseY < 0){mouseY = 0}  
+
 	return true
 }
 
 // get values from joy image click
-function getJoyValues()
+function getJoyValues(elementId)
 {
-	//alert(tempX + "  " + tempY);
-	var elem = document.getElementById('joy');
-	//alert('top = ' + elem.offsetTop
-	//   + '\nleft = ' + elem.offsetLeft
-	//   + '\nwidth = ' + elem.width );
+	var elem = document.getElementById(elementId);
 
 	x = 0;
-	if (tempX > elem.offsetLeft && tempX < elem.offsetLeft + elem.width)
-		x = tempX - elem.offsetLeft;
-
 	y = 0;
-	if (tempY > elem.offsetTop && tempY < elem.offsetTop + elem.height)
-		y = tempY - elem.offsetTop;
+	if ((mouseX > elem.offsetLeft && mouseX < elem.offsetLeft + elem.width) && (mouseY > elem.offsetTop && mouseY < elem.offsetTop + elem.height))
+	{
+		x = mouseX - elem.offsetLeft;
+		y = mouseY - elem.offsetTop;
+	}
+	else
+		return [0,0];
+
 
 	// set zero to center (range x & y = -250 to 250)
-	x = x - 250;
-	y = y * -1 + 250;
+	x = x - (elem.width / 2);
+	y = y * -1 + (elem.height / 2);
 
 	// from 250 to 100
-	x = x / 2.5;
-	y = y / 2.5;
+	x = x / (elem.width / 200);
+	y = y / (elem.height / 200);
 
 	return [x, y];
 }
 
-
+// calc direction from image click and drive motors
 function driveMotors()
 {
-  // motors 1 and 2 speed
-  y1 = 0;
-  y2 = 0;
-	
-  // get joy values
-  joyValues = getJoyValues();
-  x = joyValues[0];
-  y = joyValues[1];
+	// motors 1 and 2 speed
+	y1 = 0;
+	y2 = 0;
+
+	// get joy values
+	joyValues = getJoyValues('joy');
+	x = joyValues[0];
+	y = joyValues[1];
   
  
-  // center click - stop
-  if(x > -20 && x < 20 && y > -20 && y < 20)
-  {
-	x = 0;
-	y = 0; 
-  }
-  
-  // left or right - turn
-  if(y > -20 && y < 20)
-  {
-    // speed is x distance to center
-    y1 = x * -1;
-	y2 = x;
-  }
-  else
-  {  
-    // motors 1 and 2 speed
-    y1 = y;
-    y2 = y;
-  
-    // from 0 - 1
-    factor = Math.abs(x) / 100;
-    // invert
-    factor = 1 - factor;
+	// center click - stop
+	if(x > -24 && x < 24 && y > -24 && y < 24)
+	{
+		x = 0;
+		y = 0; 
+	}
 
-    //  $("#result").text(factor);
-    //  return false;
-    //  alert(y1 + " - " + y2);
+	// left or right - turn
+	if(y > -22 && y < 22)
+	{
+		// speed is x distance to center
+		y1 = x;
+		y2 = x * -1;
+	}
+	else
+	{  
+		// motors 1 and 2 speed
+		y1 = y;
+		y2 = y;
 
-    // x reduces the speed
-    if(x < 0)
-      y2 = y2 * factor;
+		// from 0 - 1
+		factor = Math.abs(x) / 100;
+		// invert
+		factor = 1 - factor;
 
-    if(x > 0)
-      y1 = y1 * factor;
-  }
+		// x reduces the speed
+		if(x < 0)
+		  y1 = y1 * factor;
 
-  // convert to integers
-  y1 = parseInt(y1, 10);
-  y2 = parseInt(y2, 10);
+		if(x > 0)
+		  y2 = y2 * factor;
+	}
 
-  // send values
-  $.getJSON('/drive', {
-    m1: y1,
-    m2: y2
-  }, function(data) {
-    $("#result").text(data.m1 + " - " + data.m2);
-  });
+	// convert to integers
+	y1 = parseInt(y1, 10);
+	y2 = parseInt(y2, 10);
 
-  return false;
+	// send values
+	$.getJSON('/drive', {
+		m1: y1,
+		m2: y2
+		}, function(data) {
+		$("#result").text(data.m1 + " - " + data.m2);
+	});
+
+	return false;
 }
 
+// send motor stop
 function stopMotors()
 {
 	$.getJSON('/drive', {
@@ -137,6 +134,34 @@ function stopMotors()
 	});
 }
 
+// calc direction from image click and drive servo
+function servo(num)
+{
+	// servo center value
+	servomin = 2.6;
+	servomax = 11.2;
+	servorange = servomax - servomin;			// 8.6
+	servofactor = 100 / servorange;				// to get the 0,100 range to servo duty cycle values
+	servopos = servomin + (servorange / 2);		// center = 6.9
+
+	// get joy values
+	joyValues = getJoyValues("servo" + num);
+
+	if(num == 0)
+	{
+		servopos = joyValues[0] * -1;
+	}
+	else
+	{
+		servopos = joyValues[1] * -1;
+	}
+
+	// convert from range -100,100 to 2.6,11.2 ::: 
+	servopos = (servopos + 100) / 2;	// range is now 0,100
+	servopos = servomin + (servopos / servofactor); //range is now servomin to servomax
+
+	$.getJSON('/servo', { num: num, pos: servopos }, null);
+}
 
 
 function resizeCanvas()
@@ -157,7 +182,7 @@ function startVideo()
 	ctx.fillText('Loading...', canvas.width/2-30, canvas.height/3);
 
 	// Setup the WebSocket connection and start the player
-	var client = new WebSocket('ws://10.1.1.99:8084/');
+	var client = new WebSocket('ws://10.1.1.132:8084/');
 	var player = new jsmpeg(client, {canvas:canvas});
 
 	resizeCanvas();
